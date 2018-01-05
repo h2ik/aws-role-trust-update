@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 BINARY=aws-role-trust-update
-PACKAGE=github.com/sugarcrm/aws-role-trust-update
+PACKAGE=github.com/h2ik/aws-role-trust-update
 
 LDFLAGS=-ldflags "-s -w"
 GCFLAGS=-gcflags "-N -l"
