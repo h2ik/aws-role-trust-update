@@ -22,7 +22,7 @@ func (pd *policyDocument) AddStatement(statement policyStatement) error {
 	found := false
 	for _, element := range pd.Statement {
 		if element.Principal.AWS == statement.Principal.AWS {
-			return fmt.Errorf("ARN (%s) already trusted by role (%s)\n", awsARN, roleName)
+			return fmt.Errorf("arn (%s) already trusted by role (%s)", awsARN, roleName)
 		}
 	}
 	if !found {
@@ -63,13 +63,20 @@ func main() {
 	// create the service
 	svc := iam.New(session.New())
 
+	// fetch the document
 	document, err := getExistingPolicyDocument(svc)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	err = updatePolicyDocument(svc, document)
+	// add the arn to the document
+	err = addARNToDocument(document)
+	if err != nil {
+		panic(err.Error())
+	}
 
+	// update the document this will only be hit if the arn doesn't exist in the current document
+	err = updatePolicyDocument(svc, document)
 	if err != nil {
 		panic(err.Error())
 	}
